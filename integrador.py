@@ -154,7 +154,7 @@ try:
             if now - t_last_release >= 0.05: #tiempo mínimo (en segundos) que la señal del botón debe permanecer estable en “liberado” para considerarse realmente soltado.
                 held_s = now - t_btn_press
 
-                # ======== LÓGICA DE AJUSTE DE CICLO ========
+                # ============ LÓGICA DE AJUSTE DE CICLO ============
                 if (held_s <= 0.02):
                     # Ignorar toques demasiado cortos
                     print(f"TOQUE DEMASIADO CORTO DE {held_s:.2f}s, IGNORADO")
@@ -173,7 +173,7 @@ try:
                     # Entre 2.5 y 10 s (zona intermedia): dejo el ciclo como está
                     cycle_s = held_s
                     print(f"NUEVO CICLO DE {held_s:.2f}s (PULSACION INTERMEDIA)")
-                # ==================================================
+                # ===================================================
 
             t_last_release = now
 
