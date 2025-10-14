@@ -3,7 +3,7 @@
 import socket
 import matplotlib.pyplot as plt
 
-server_ip = "127.0.0.1"   # si es la misma PC
+server_ip = "172.23.132.186"   # si es la misma PC
 port = 5000
 
 s = socket.socket()

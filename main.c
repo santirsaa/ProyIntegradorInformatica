@@ -9,7 +9,7 @@
 
 
 int main(void) {
-    FILE *f = fopen("C:/Users/manu3/python/salida.txt", "r");
+    FILE *f = fopen("salida.txt", "r");
     if (!f) {
         perror("No se pudo abrir");
         return 1;
@@ -23,7 +23,7 @@ int main(void) {
 
     while (fgets(linea, sizeof linea, f)) // no se cumple si no hay linea disponible
     {
-        // si empieza con dígito -> es una línea de datos
+        // si empieza con dï¿½gito -> es una lï¿½nea de datos
         if (isdigit((unsigned char)*linea))
         {
             contador++;
@@ -55,7 +55,7 @@ int main(void) {
     while (fgets(linea, sizeof linea, f)) // no se cumple si no hay linea disponible
     {
 
-        if (isdigit((unsigned char)*linea)) // si empieza con dígito -> es una línea de datos
+        if (isdigit((unsigned char)*linea)) // si empieza con dï¿½gito -> es una lï¿½nea de datos
         {
             char *token_fecha = strtok(linea,",");
             char *token_tiempo = strtok(NULL,",");
