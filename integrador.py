@@ -88,17 +88,11 @@ def set_trend_led(tr):
 
 # ===================== Cálculos =====================
 def push_and_mean(x):
-    # CHANGE: no ingresar None al buffer
-    if x is None:
-        return (sum(buf)/len(buf)) if len(buf) else float('nan')
     buf.append(x)
     return sum(buf) / len(buf)
 
 def read_temp_c():
     v_ratio = a0.read()
-    if v_ratio is None:
-        return None
-    # limitar a rango seguro para evitar div/0
     v_ratio = min(max(v_ratio, 1.0/ADC_MAX), 1.0 - 1.0/ADC_MAX)
     v = v_ratio * VREF
     r_ntc = (v * R_FIXED) / (VREF - v)
@@ -153,7 +147,7 @@ try:
             btn_held = False
             held_s = now - t_btn_press
             # ======== LÓGICA DE AJUSTE DE CICLO ========
-            if (held_s <= 0.02):
+            if (held_s <= 0.05):
                 # Ignorar toques demasiado cortos
                 print(f"TOQUE DEMASIADO CORTO DE {held_s:.2f}s, IGNORADO")
             elif (0.02 < held_s< 1):
@@ -187,11 +181,8 @@ try:
             if time.monotonic()-t_last_release >0.01: #se evita que parpadee apenas termina de pulsar
                 parpadeo_todos_y_restituir(0.05) #parpadeo de ciclo
 
-            if tr != "INS":
-                set_trend_led(tr)
-            else:
-                leds_all_on()
-                last_trend = "INS"
+            set_trend_led(tr)
+
             #guardo la media y la temperatura como string para el caso en que no hay datos
             mean_str = f"{meanN:.2f}" if len(buf) else "nan"
             temp_str = f"{tempC:.2f}" if not (tempC is None) else "nan"
