@@ -119,12 +119,7 @@ leds_all_on()
 try:
     btn_prev = btn_val
 
-    # Esperar a que A0 tenga datos iniciales (hasta 5 s)
     t0 = time.monotonic()
-    while a0.read() is None and (time.monotonic() - t0) < 5.0:
-        time.sleep(0.05)
-    if a0.read() is None:
-        print("ADVERTENCIA: No llegan lecturas de A0. Verifica cableado y Firmata.")
 
     while True:
         now = time.monotonic()
