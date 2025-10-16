@@ -2,7 +2,7 @@
 # Arduino: IDE > File > Examples > Firmata > StandardFirmata (cargarlo en el arduino)
 # Si usas PyFirmata viejo: reemplazar getargspec por getfullargspec en el script del pyfirmata
 # Driver CH340 si tu placa lo requiere
-
+#comentario
 import time, math, sys, socket
 from datetime import datetime
 from collections import deque
