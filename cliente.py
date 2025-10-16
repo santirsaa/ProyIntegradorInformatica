@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 server_ip = "10.65.3.89"   # IP del servidor
 port = 5000 
-
+#comentario merge
 s = socket.socket() # crear socket
 print("Conectando al servidor...")
 s.connect((server_ip, port)) # conectar al servidor
