@@ -9,7 +9,7 @@
 
 
 int main(void) {
-    FILE *f = fopen("salida.txt", "r");
+    FILE *f = fopen("C:/Users/manu3/python/salida.txt", "r");
     if (!f) {
         perror("No se pudo abrir");
         return 1;
@@ -46,7 +46,7 @@ int main(void) {
     }
 
     //ahora procedo a guardar los datos en los vectores fecha, tiempo y temp
-    //reinicio el cursor y el contador para hace un while similar
+    //reinicio el cursor y el contador para hacer un while similar
     rewind(f);
     // descartar cabecera
     fgets(linea, sizeof linea, f);
@@ -55,7 +55,7 @@ int main(void) {
     while (fgets(linea, sizeof linea, f)) // no se cumple si no hay linea disponible
     {
 
-        if (isdigit((unsigned char)*linea)) // si empieza con d�gito -> es una l�nea de datos
+        if (isdigit((unsigned char)*linea)) // si empieza con dígito -> es una línea de datos
         {
             char *token_fecha = strtok(linea,",");
             char *token_tiempo = strtok(NULL,",");
@@ -76,16 +76,16 @@ int main(void) {
     //calculos estadisticos:
 
     size_t *indices = DevolverMaxMin(temp,contador);
-    //printf("el indice donde se detecto el max es %llu y el indice donde se detecto el min es %llu (contando desde cero)\n",indices[0],indices[1]);
-
     printf("la temperatura maxima fue de %lf y se detecto en la fecha y hora %s\n",temp[indices[0]],fecha[indices[0]]);
 
     printf("la temperatura minima fue de %lf y se detecto en la fecha y hora %s\n",temp[indices[1]],fecha[indices[1]]);
 
     double media = DevolverMedia(temp,contador);
+    double moda = DevolverModa(temp,contador);
+    double varianza = Varianza(temp,contador,media);
     printf("la temperatura media fue de %lf\n",media);
-    printf("la temperatura moda fue de %lf\n",DevolverModa(temp,contador));
-    printf("el desvio tipico alrededor de la media fue de %lf\n",sqrt(Varianza(temp,contador,media)));
+    printf("la temperatura moda fue de %lf\n",moda);
+    printf("el desvio tipico alrededor de la media fue de %lf\n",sqrt(varianza));
 
     OrdenarVector(temp,contador);
 
@@ -109,3 +109,4 @@ int main(void) {
     free(temp);
     return 0;
 }
+
