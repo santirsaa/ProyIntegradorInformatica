@@ -3,44 +3,44 @@
 import socket
 import matplotlib.pyplot as plt
 
-server_ip = "10.65.4.226"   # si es la misma PC
-port = 5000
+server_ip = "10.65.3.89"   # IP del servidor
+port = 5000 
 
-s = socket.socket()
-s.connect((server_ip, port))
-print("Conectado al servidor\n")
+s = socket.socket() # crear socket
+print("Conectando al servidor...")
+s.connect((server_ip, port)) # conectar al servidor
+print("Conectado al servidor\n") 
 
 x = []
 lista = []
 
-plt.ion()   # 🔹 ① modo interactivo: permite actualizar el gráfico en tiempo real
+plt.ion()   # modo interactivo: permite actualizar el gráfico en tiempo real
 
 i = 0
 
-while True:
-    data = s.recv(1024)
+while True: 
+    data = s.recv(1024) # recibir datos del servidor 
     if not data:
         break
-    valor = data.decode().strip()   # 🔹 ② guardar texto decodificado
+    valor = data.decode().strip()   # guardar texto decodificado
     print(valor)
 
     try:
-        lista.append(float(valor))  # 🔹 ③ convertir el texto a número
+        lista.append(float(valor))  # convertir el texto a número
     except ValueError:
         continue                    # si llega algo que no es número, lo ignora
 
     x.append(i)
 
     plt.clf()                       # borrar gráfico anterior
+    plt.plot(x, lista, 'r-o') # gráfico de puntos rojos
     plt.title("Temperatura en tiempo real")
     plt.xlabel("Lectura")
     plt.ylabel("Temperatura (°C)")
-    plt.plot(x, lista, 'r-o')
-
-    plt.pause(0.1)   # 🔹 ④ deja actualizar la ventana
+    plt.pause(0.1)   # pausa el while, para que se actualice la interfaz gráfica
 
     i += 1
 
 s.close()
-plt.ioff()   # 🔹 ⑤ deja la ventana fija al terminar
+plt.ioff()   # deja la ventana fija al terminar
 plt.show()
