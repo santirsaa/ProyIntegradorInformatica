@@ -9,7 +9,7 @@ from collections import deque
 from pyfirmata import Arduino, util
 
 # ===================== Config =====================
-PORT = 'COM5'  # Cambiar por tu puerto
+PORT = 'COM8'  # Cambiar por tu puerto
 board = Arduino(PORT)
 
 # Iterator para lecturas analógicas
@@ -151,30 +151,28 @@ try:
 
         if btn_val == 0 and btn_prev == 1:  # soltado
             btn_held = False
-            if now - t_last_release >= 0.05: #tiempo mínimo (en segundos) que la señal del botón debe permanecer estable en “liberado” para considerarse realmente soltado.
-                held_s = now - t_btn_press
-
-                # ============ LÓGICA DE AJUSTE DE CICLO ============
-                if (held_s <= 0.02):
-                    # Ignorar toques demasiado cortos
-                    print(f"TOQUE DEMASIADO CORTO DE {held_s:.2f}s, IGNORADO")
-                elif (0.02 < held_s< 1):
-                    print(f"TOQUE DE {held_s:.2f}s, STOP REQUEST")
-                    break
-                elif 1 <= held_s <= 2.5:
-                    cycle_s = 2.5
-                    print(f"NUEVO CICLO DE {cycle_s:.2f} (PULSACIÓN DE {held_s:.2f}s)")
-                    last_cycle = now
-                elif held_s >= 10:
-                    cycle_s = 10
-                    print(f"NUEVO CICLO DE {cycle_s:.2f} (PULSACIÓN DE {held_s:.2f}s)")
-                    last_cycle = now
-                else:
-                    # Entre 2.5 y 10 s (zona intermedia): dejo el ciclo como está
-                    cycle_s = held_s
-                    print(f"NUEVO CICLO DE {held_s:.2f}s (PULSACION INTERMEDIA)")
-                    last_cycle = now
-                # ===================================================
+            held_s = now - t_btn_press
+            # ======== LÓGICA DE AJUSTE DE CICLO ========
+            if (held_s <= 0.02):
+                # Ignorar toques demasiado cortos
+                print(f"TOQUE DEMASIADO CORTO DE {held_s:.2f}s, IGNORADO")
+            elif (0.02 < held_s< 1):
+                print(f"TOQUE DE {held_s:.2f}s, STOP REQUEST")
+                break
+            elif 1 <= held_s <= 2.5:
+                cycle_s = 2.5
+                print(f"NUEVO CICLO DE {cycle_s:.2f} (PULSACIÓN DE {held_s:.2f}s)")
+                last_cycle = now
+            elif held_s >= 10:
+                cycle_s = 10
+                print(f"NUEVO CICLO DE {cycle_s:.2f} (PULSACIÓN DE {held_s:.2f}s)")
+                last_cycle = now
+            else:
+                # Entre 2.5 y 10 s (zona intermedia): dejo el ciclo como está
+                cycle_s = held_s
+                print(f"NUEVO CICLO DE {held_s:.2f}s (PULSACION INTERMEDIA)")
+                last_cycle = now
+            # ==================================================
 
             t_last_release = now
 
@@ -211,5 +209,7 @@ finally:
     board.exit()
     sys.stdout.close()
     sys.stdout = sys.__stdout__
+
+    # ==== cierro el socket =====
     conn.close()
     server.close()
