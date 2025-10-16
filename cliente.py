@@ -1,8 +1,8 @@
 # pip install matplotlib
-# comentario 2
+
 import socket
 import matplotlib.pyplot as plt
-
+# comentario 2
 server_ip = "10.65.3.89"   # IP del servidor
 port = 5000 
 
