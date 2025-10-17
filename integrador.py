@@ -140,26 +140,26 @@ try:
 
         if boton_valor == 0 and btn_prev == 1:  # soltado
             boton_presionado = False
-            held_s = now - presiona_boton
+            pulso = now - presiona_boton
             # ======== LÓGICA DE AJUSTE DE CICLO ========
-            if (held_s <= 0.05):
+            if (pulso <= 0.05):
                 # Ignorar toques demasiado cortos
-                print(f"TOQUE DEMASIADO CORTO DE {held_s:.2f}s, IGNORADO")
-            elif (0.02 < held_s< 1):
-                print(f"TOQUE DE {held_s:.2f}s, STOP REQUEST")
+                print(f"TOQUE DEMASIADO CORTO DE {pulso:.2f}s, IGNORADO")
+            elif (0.02 < pulso< 1):
+                print(f"TOQUE DE {pulso:.2f}s, STOP REQUEST")
                 break
-            elif 1 <= held_s <= 2.5:
+            elif 1 <= pulso <= 2.5:
                 ciclo = 2.5
-                print(f"NUEVO CICLO DE {ciclo:.2f} (PULSACIÓN DE {held_s:.2f}s)")
+                print(f"NUEVO CICLO DE {ciclo:.2f} (PULSACIÓN DE {pulso:.2f}s)")
                 ultimo_ciclo = now
-            elif held_s >= 10:
+            elif pulso >= 10:
                 ciclo = 10
-                print(f"NUEVO CICLO DE {ciclo:.2f} (PULSACIÓN DE {held_s:.2f}s)")
+                print(f"NUEVO CICLO DE {ciclo:.2f} (PULSACIÓN DE {pulso:.2f}s)")
                 ultimo_ciclo = now
             else:
                 # Entre 2.5 y 10 s (zona intermedia): dejo el ciclo como está
-                ciclo = held_s
-                print(f"NUEVO CICLO DE {held_s:.2f}s (PULSACION INTERMEDIA)")
+                ciclo = pulso
+                print(f"NUEVO CICLO DE {pulso:.2f}s (PULSACION INTERMEDIA)")
                 ultimo_ciclo = now
             # ==================================================
 
