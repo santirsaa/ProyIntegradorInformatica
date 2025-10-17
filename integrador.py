@@ -13,7 +13,8 @@ PORT = 'COM8'  # Cambiar por tu puerto
 board = Arduino(PORT)
 
 # Iterator para lecturas analógicas
-util.Iterator(board).start()
+it = util.Iterator(board)
+it.start()
 
 # Entradas
 a0  = board.get_pin('a:0:i')   # A0: KY-013
@@ -162,8 +163,6 @@ try:
                 ultimo_ciclo = now
             # ==================================================
 
-            suelta_boton = now
-
         boton_antes = boton_valor
 
         # --- Ciclo de monitoreo ---
@@ -172,8 +171,8 @@ try:
 
             meanN = empujar_y_media(tempC)
             tr = calcular_tendencia(tempC, meanN)
-            if time.monotonic()-suelta_boton >0.01: #se evita que parpadee apenas termina de pulsar
-                parpadeo_todos_y_restituir(0.05) #parpadeo de ciclo
+            
+            parpadeo_todos_y_restituir(0.05)
 
             poner_tendencia(tr)
 
