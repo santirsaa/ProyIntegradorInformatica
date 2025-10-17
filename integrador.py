@@ -110,7 +110,7 @@ def trend_from(current, meanN):
     return "EST"
 
 # ===================== Bucle principal =====================
-header = "fecha,t,tempC,meanN,trend,cycle_s"
+header = "fecha y hora, tiempo, temperatura, media móvil, tendencia, ciclo"
 print(header)
 
 leds_all_on()
