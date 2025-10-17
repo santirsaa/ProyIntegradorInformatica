@@ -2,7 +2,7 @@
 # Arduino: IDE > File > Examples > Firmata > StandardFirmata (cargarlo en el arduino)
 # Si usas PyFirmata viejo: reemplazar getargspec por getfullargspec en el script del pyfirmata
 # Driver CH340 si tu placa lo requiere
-#comentario
+
 import time, math, sys, socket
 from datetime import datetime
 from collections import deque
@@ -13,7 +13,8 @@ PORT = 'COM8'  # Cambiar por tu puerto
 board = Arduino(PORT)
 
 # Iterator para lecturas analógicas
-util.Iterator(board).start()
+it = util.Iterator(board)
+it.start()
 
 # Entradas
 a0  = board.get_pin('a:0:i')   # A0: KY-013
@@ -25,9 +26,9 @@ led_b = board.get_pin('d:12:o')
 led_r = board.get_pin('d:13:o')
 
 # ===================== Parámetros =====================
-VREF = 5.0
-ADC_MAX = 1023.0
-R_FIXED = 10000.0
+voltaje_referencia = 5.0
+val_max_conv_ADC = 1023.0
+resistencia_fija = 10000.0
 
 N = 5               # ventana para media móvil
 Xpct = 5.0
@@ -41,66 +42,66 @@ server.bind(("0.0.0.0", 5000))  # Escucha en todas las IP, puerto 5000
 server.listen(1)
 
 print("Esperando conexión...")
-conn, addr = server.accept()
-print("Conectado con", addr)
+coneccion, direccion = server.accept()
+print("Conectado con", direccion)
 
 
 # ===================== Estado =====================
 buf = deque(maxlen=N)
-cycle_s = 3.5
-last_cycle = time.monotonic()
-last_hold_blink = last_cycle
-t_btn_press = 0.0
-t_last_release = 0.0
-btn_held = False
+ciclo = 3.5 #cycle_s
+ultimo_ciclo = time.monotonic() # last_cycle
+ultimo_parpadeo_presionando= ultimo_ciclo # last_hold_blink
+presiona_boton = 0.0 #t_btn_press
+suelta_boton = 0.0 #t_last_release
+boton_presionado = False #btn_held
 
-btn_val = 0
-last_trend = "INS"
+boton_valor = 0 #btn_val
+ultima_tendencia = "INS" #last_trend
 
 # ===================== Helpers LEDs =====================
-def leds_all_off():
+def apagar_todos():
     led_r.write(0); led_b.write(0); led_g.write(0)
 
-def leds_all_on():
+def prender_todos():
     led_r.write(1); led_b.write(1); led_g.write(1)
 
 def restituir_leds_de_tendencia():
-    leds_all_off()
-    if   last_trend == "ALZ": led_r.write(1)
-    elif last_trend == "EST": led_b.write(1)
-    elif last_trend == "BAJ": led_g.write(1)
-    elif last_trend == "INS": leds_all_on()
+    apagar_todos()
+    if   ultima_tendencia == "ALZ": led_r.write(1)
+    elif ultima_tendencia == "EST": led_b.write(1)
+    elif ultima_tendencia == "BAJ": led_g.write(1)
+    elif ultima_tendencia == "INS": prender_todos()
 
 def parpadeo_todos_y_restituir(duration_s):
-    leds_all_on()
+    prender_todos()
     time.sleep(duration_s)
     restituir_leds_de_tendencia()
 
-def set_trend_led(tr):
-    global last_trend
-    last_trend = tr
-    leds_all_off()
+def poner_tendencia(tr):
+    global ultima_tendencia
+    ultima_tendencia = tr
+    apagar_todos()
     if   tr == "ALZ": led_r.write(1)
     elif tr == "EST": led_b.write(1)
     elif tr == "BAJ": led_g.write(1)
-    elif tr == "INS": leds_all_on()
+    elif tr == "INS": prender_todos()
 
 # ===================== Cálculos =====================
-def push_and_mean(x):
+def empujar_y_media(x):
     buf.append(x)
     return sum(buf) / len(buf)
 
-def read_temp_c():
+def leer_temperatura():
     v_ratio = a0.read()
-    v_ratio = min(max(v_ratio, 1.0/ADC_MAX), 1.0 - 1.0/ADC_MAX)
-    v = v_ratio * VREF
-    r_ntc = (v * R_FIXED) / (VREF - v)
+    v_ratio = min(max(v_ratio, 1.0/val_max_conv_ADC), 1.0 - 1.0/val_max_conv_ADC)
+    v = v_ratio * voltaje_referencia
+    r_ntc = (v * resistencia_fija) / (voltaje_referencia - v)
 
     lnR = math.log(r_ntc)
     invT = 0.001129148 + 0.000234125*lnR + 0.0000000876741*(lnR**3)  # Steinhart–Hart
     return (1.0 / invT) - 273.15
 
-def trend_from(current, meanN):
+def calcular_tendencia(current, meanN):
     if len(buf) < N or current is None or math.isnan(meanN):
         return "INS"
     up = meanN * (1.0 + Xpct/100.0)
@@ -113,10 +114,10 @@ def trend_from(current, meanN):
 header = "fecha y hora, tiempo, temperatura, media móvil, tendencia, ciclo"
 print(header)
 
-leds_all_on()
+prender_todos()
 
 try:
-    btn_prev = btn_val
+    btn_prev = boton_valor
 
     t0 = time.monotonic()
 
@@ -125,21 +126,21 @@ try:
         ahora = datetime.now()
 
         # Leer entradas
-        btn_val = btn.read()
+        boton_valor = btn.read()
 
         # --- Botón ---
-        if btn_val == 1 and btn_prev == 0:  # presionado
-            t_btn_press = now
-            last_hold_blink = now
-            btn_held = True
+        if boton_valor == 1 and btn_prev == 0:  # presionado
+            presiona_boton = now
+            ultimo_parpadeo_presionando = now
+            boton_presionado = True
 
-        if btn_held and (now - last_hold_blink >= 1.0):
+        if boton_presionado and (now - ultimo_parpadeo_presionando >= 1.0):
             parpadeo_todos_y_restituir(0.05)
-            last_hold_blink += 1.0
+            ultimo_parpadeo_presionando += 1.0
 
-        if btn_val == 0 and btn_prev == 1:  # soltado
-            btn_held = False
-            held_s = now - t_btn_press
+        if boton_valor == 0 and btn_prev == 1:  # soltado
+            boton_presionado = False
+            held_s = now - presiona_boton
             # ======== LÓGICA DE AJUSTE DE CICLO ========
             if (held_s <= 0.05):
                 # Ignorar toques demasiado cortos
@@ -148,53 +149,53 @@ try:
                 print(f"TOQUE DE {held_s:.2f}s, STOP REQUEST")
                 break
             elif 1 <= held_s <= 2.5:
-                cycle_s = 2.5
-                print(f"NUEVO CICLO DE {cycle_s:.2f} (PULSACIÓN DE {held_s:.2f}s)")
-                last_cycle = now
+                ciclo = 2.5
+                print(f"NUEVO CICLO DE {ciclo:.2f} (PULSACIÓN DE {held_s:.2f}s)")
+                ultimo_ciclo = now
             elif held_s >= 10:
-                cycle_s = 10
-                print(f"NUEVO CICLO DE {cycle_s:.2f} (PULSACIÓN DE {held_s:.2f}s)")
-                last_cycle = now
+                ciclo = 10
+                print(f"NUEVO CICLO DE {ciclo:.2f} (PULSACIÓN DE {held_s:.2f}s)")
+                ultimo_ciclo = now
             else:
                 # Entre 2.5 y 10 s (zona intermedia): dejo el ciclo como está
-                cycle_s = held_s
+                ciclo = held_s
                 print(f"NUEVO CICLO DE {held_s:.2f}s (PULSACION INTERMEDIA)")
-                last_cycle = now
+                ultimo_ciclo = now
             # ==================================================
 
-            t_last_release = now
+            suelta_boton = now
 
-        btn_prev = btn_val
+        btn_prev = boton_valor
 
         # --- Ciclo de monitoreo ---
-        if (not btn_held) and (now - last_cycle >= cycle_s):
-            tempC = read_temp_c()
+        if (not boton_presionado) and (now - ultimo_ciclo >= ciclo):
+            tempC = leer_temperatura()
 
-            meanN = push_and_mean(tempC)
-            tr = trend_from(tempC, meanN)
-            if time.monotonic()-t_last_release >0.01: #se evita que parpadee apenas termina de pulsar
+            meanN = empujar_y_media(tempC)
+            tr = calcular_tendencia(tempC, meanN)
+            if time.monotonic()-suelta_boton >0.01: #se evita que parpadee apenas termina de pulsar
                 parpadeo_todos_y_restituir(0.05) #parpadeo de ciclo
 
-            set_trend_led(tr)
+            poner_tendencia(tr)
 
             #guardo la media y la temperatura como string para el caso en que no hay datos
             mean_str = f"{meanN:.2f}" if len(buf) else "nan"
             temp_str = f"{tempC:.2f}" if not (tempC is None) else "nan"
-            mensaje = f"{ahora.strftime('%d/%m/%Y %H:%M:%S')},{now-t0:.2f},{temp_str},{mean_str},{tr},{cycle_s:.2f}"
+            mensaje = f"{ahora.strftime('%d/%m/%Y %H:%M:%S')},{now-t0:.2f},{temp_str},{mean_str},{tr},{ciclo:.2f}"
             print(mensaje)
-            conn.send(temp_str.encode()) 
-            last_cycle += cycle_s
+            coneccion.send(temp_str.encode()) 
+            ultimo_ciclo += ciclo
 
         time.sleep(0.002)
 
 except KeyboardInterrupt:
     pass
 finally:
-    leds_all_off()
+    apagar_todos()
     board.exit()
     sys.stdout.close()
     sys.stdout = sys.__stdout__
 
     # ==== cierro el socket =====
-    conn.close()
+    coneccion.close()
     server.close()
