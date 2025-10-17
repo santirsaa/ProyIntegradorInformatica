@@ -1,10 +1,16 @@
 # pip install matplotlib
+# comentario 123
 import socket
 import matplotlib.pyplot as plt
 
 server_ip = "10.65.3.89"   # IP del servidor
+<<<<<<< HEAD
 port = 5000
 
+=======
+port = 5000 
+#comentario merge
+>>>>>>> e90bd4343815006afdd226a63942117e946c650f
 s = socket.socket() # crear socket
 print("Conectando al servidor...")
 s.connect((server_ip, port)) # conectar al servidor

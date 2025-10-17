@@ -30,21 +30,46 @@ int main(void) {
         }
     }
     //reservo memoria
-    double *tiempo = malloc(contador*sizeof(double));
-    double *temp = malloc(contador*sizeof(double));
 
+
+    double *tiempo = malloc(contador*sizeof(double));
+    if (tiempo == NULL)
+    {
+        return 1;
+    }
+    double *temp = malloc(contador*sizeof(double));
+    if (temp == NULL)
+    {
+        free(tiempo);
+        return 1;
+    }
 
     //reservo memoria para las fechas
     char **fecha;
 
     //guardo memoria para el vector de fechas (el cual consistira de cadenas de 19 caracteres)
     fecha = malloc(contador * sizeof(char *));
-
+    if (fecha == NULL)
+        {
+            free(tiempo);
+            free(temp);
+            return 1;
+        }
     for (int i = 0; i < contador; i++)
     {
         fecha[i] = malloc(19 * sizeof(char)); // hasta 9 caracteres + '\0' por cada parte
+        if (fecha[i] == NULL)
+        {
+            free(tiempo);
+            free(temp);
+            for (int j=0;j<i;j++)
+            {
+                free(fecha[j]);
+            }
+            free(fecha);
+            return 1;
+        }
     }
-
     //ahora procedo a guardar los datos en los vectores fecha, tiempo y temp
     //reinicio el cursor y el contador para hacer un while similar
     rewind(f);
@@ -109,4 +134,5 @@ int main(void) {
     free(temp);
     return 0;
 }
+
 
