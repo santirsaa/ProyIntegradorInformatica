@@ -71,9 +71,9 @@ def restituir_leds_de_tendencia():
     elif ultima_tendencia == "BAJ": led_g.write(1)
     elif ultima_tendencia == "INS": prender_todos()
 
-def parpadeo_todos_y_restituir(duration_s):
+def parpadeo_todos_y_restituir(duracion):
     prender_todos()
-    time.sleep(duration_s)
+    time.sleep(duracion)
     restituir_leds_de_tendencia()
 
 def poner_tendencia(tr):
