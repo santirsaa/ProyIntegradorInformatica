@@ -13,7 +13,8 @@ PORT = 'COM8'  # Cambiar por tu puerto
 board = Arduino(PORT)
 
 # Iterator para lecturas analógicas
-util.Iterator(board).start()
+it = util.Iterator(board)
+it.start()
 
 # Entradas
 a0  = board.get_pin('a:0:i')   # A0: KY-013
@@ -116,7 +117,7 @@ print(header)
 prender_todos()
 
 try:
-    btn_prev = boton_valor
+    boton_antes = boton_valor
 
     t0 = time.monotonic()
 
@@ -128,7 +129,7 @@ try:
         boton_valor = btn.read()
 
         # --- Botón ---
-        if boton_valor == 1 and btn_prev == 0:  # presionado
+        if boton_valor == 1 and boton_antes == 0:  # presionado
             presiona_boton = now
             ultimo_parpadeo_presionando = now
             boton_presionado = True
@@ -137,7 +138,7 @@ try:
             parpadeo_todos_y_restituir(0.05)
             ultimo_parpadeo_presionando += 1.0
 
-        if boton_valor == 0 and btn_prev == 1:  # soltado
+        if boton_valor == 0 and boton_antes == 1:  # soltado
             boton_presionado = False
             pulso = now - presiona_boton
             # ======== LÓGICA DE AJUSTE DE CICLO ========
@@ -164,7 +165,7 @@ try:
 
             suelta_boton = now
 
-        btn_prev = boton_valor
+        boton_antes = boton_valor
 
         # --- Ciclo de monitoreo ---
         if (not boton_presionado) and (now - ultimo_ciclo >= ciclo):
