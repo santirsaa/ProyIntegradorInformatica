@@ -13,8 +13,7 @@ PORT = 'COM8'  # Cambiar por tu puerto
 board = Arduino(PORT)
 
 # Iterator para lecturas analógicas
-it = util.Iterator(board)
-it.start()
+util.Iterator(board).start()
 
 # Entradas
 a0  = board.get_pin('a:0:i')   # A0: KY-013
