@@ -1,7 +1,7 @@
 #ifndef FUNCIONES_H_INCLUDED
 #define FUNCIONES_H_INCLUDED
 
-size_t DevolverMaxMin(double *vec, unsigned int n);
+size_t *DevolverMaxMin(double *vec, unsigned int n);
 double DevolverMedia(double *vec, unsigned int n);
 double DevolverModa(const double *v, int n);
 void OrdenarVector(double *v, int n);
