@@ -51,7 +51,6 @@ ciclo = 3.5 #cycle_s
 ultimo_ciclo = time.monotonic() # last_cycle
 ultimo_parpadeo_presionando= ultimo_ciclo # last_hold_blink
 presiona_boton = 0.0 #t_btn_press
-suelta_boton = 0.0 #t_last_release
 boton_presionado = False #btn_held
 
 boton_valor = 0 #btn_val
