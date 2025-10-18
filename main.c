@@ -1,9 +1,7 @@
-#include <stddef.h> // para size_t
 #include <stdio.h>  // para los ficheros
-#include <string.h> // para strtok
+#include <string.h> // para strtok, strcpy
 #include <ctype.h>  // para isdigit
 #include <stdlib.h> // para malloc
-#include <time.h>   // para fechas
 #include "funciones.h" // para calculos estadisticos
 #include <math.h> // para sqrt
 
@@ -23,7 +21,7 @@ int main(void) {
 
     while (fgets(linea, sizeof linea, f)) // no se cumple si no hay linea disponible
     {
-        // si empieza con d�gito -> es una l�nea de datos
+        // si empieza con dígito -> es una línea de datos
         if (isdigit((unsigned char)*linea))
         {
             contador++;
@@ -57,7 +55,7 @@ int main(void) {
         }
     for (int i = 0; i < contador; i++)
     {
-        fecha[i] = malloc(19 * sizeof(char)); // hasta 9 caracteres + '\0' por cada parte
+        fecha[i] = malloc(19 * sizeof(char)); // reservo 19 caracteres
         if (fecha[i] == NULL)
         {
             free(tiempo);
