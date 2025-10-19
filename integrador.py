@@ -193,5 +193,5 @@ finally:
     sys.stdout = sys.__stdout__
 
     # ==== cierro el socket =====
-    coneccion.close()
+    conexion.close()
     server.close()
