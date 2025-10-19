@@ -41,7 +41,7 @@ server.bind(("0.0.0.0", 5000))  # Escucha en todas las IP, puerto 5000
 server.listen(1)
 
 print("Esperando conexión...")
-coneccion, direccion = server.accept()
+conexion, direccion = server.accept()
 print("Conectado con", direccion)
 
 
