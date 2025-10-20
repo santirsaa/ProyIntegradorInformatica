@@ -179,7 +179,7 @@ try:
             temp_str = f"{tempC:.2f}" if not (tempC is None) else "nan"
             mensaje = f"{ahora.strftime('%d/%m/%Y %H:%M:%S')},{now-t0:.2f},{temp_str},{mean_str},{tr},{ciclo:.2f}"
             print(mensaje)
-            coneccion.send(temp_str.encode()) 
+            conexion.send(temp_str.encode())
             ultimo_ciclo += ciclo
 
         time.sleep(0.002)
