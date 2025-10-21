@@ -7,7 +7,7 @@
 
 
 int main(void) {
-    FILE *f = fopen("../../../salida.txt", "r");
+    FILE *f = fopen("salida.txt", "r");
     if (!f) {
         perror("No se pudo abrir");
         return 1;
