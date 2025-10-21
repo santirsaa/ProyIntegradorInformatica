@@ -3,7 +3,7 @@
 import socket
 import matplotlib.pyplot as plt
 
-server_ip = "10.65.3.89"   # IP del servidor
+server_ip = "10.62.95.54"   # IP del servidor
 port = 5000
 
 s = socket.socket() # crear socket

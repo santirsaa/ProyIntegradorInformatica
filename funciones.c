@@ -1,7 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 /******************************************************************
-Devuelve un array con los indices corresp. a temp. maxima y mínima
+Devuelve un array con los indices corresp. a temp. maxima y mï¿½nima
 ******************************************************************/
 size_t *DevolverMaxMin(double *vec, unsigned int n) //n es la longitud del vector
 {
@@ -74,6 +75,15 @@ double DevolverModa(double *v, int n)//n es la longitud del vector
     return moda;
 }
 
+/******************************************************************
+    Devuelve un array de doubles con dos elementos intercambiados
+******************************************************************/
+int IntercambiarElementos(double *v, int n, int i, int j)//n es la longitud del vector
+{
+    double temporal = v[i]; //variable temporal
+    v[i] = v[j];
+    v[j] = temporal;
+}
 
 /******************************************************************
          Ordena un vector de doubles de manera creciente
@@ -88,18 +98,6 @@ void OrdenarVector(double *v, int n)//n es la longitud del vector
         }
     }
 }
-
-
-/******************************************************************
-    Devuelve un array de doubles con dos elementos intercambiados
-******************************************************************/
-int IntercambiarElementos(double *v, int n, int i, int j)//n es la longitud del vector
-{
-    double temporal = v[i]; //variable temporal
-    v[i] = v[j];
-    v[j] = temporal;
-}
-
 
 /******************************************************************
          Devuelve la varianza de un array de doubles
