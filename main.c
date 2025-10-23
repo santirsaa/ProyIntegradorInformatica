@@ -55,7 +55,7 @@ int main(void) {
         }
     for (int i = 0; i < contador; i++)
     {
-        fecha[i] = malloc(19 * sizeof(char)); // reservo 19 caracteres
+        fecha[i] = malloc(20 * sizeof(char)); // reservo 19 caracteres
         if (fecha[i] == NULL)
         {
             free(tiempo);
