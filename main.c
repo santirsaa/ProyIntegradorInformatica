@@ -127,6 +127,7 @@ int main(void) {
     {
         free(fecha[i]);
     }
+    free(indices);
     free(fecha);
     free(tiempo);
     free(temp);
